@@ -5,6 +5,11 @@
 #include <osxfuse/fuse.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
+#include <assert.h>
+#include <stdlib.h>
+
+#include "tree.h"
 
 #ifdef __cplusplus
 #define NS_BEGIN extern "C" {
@@ -23,7 +28,8 @@ struct string_vector {
     int len, cur;
 };
 void string_vector_init(struct string_vector *);
-void string_vector_push(struct string_vector *, char const *);
+void string_vector_set(struct string_vector *, int, char const *);
+void string_vector_push(struct string_vector *, char const *, int);
 void string_vector_free(struct string_vector *);
 
 /* File System API */
@@ -45,7 +51,17 @@ int p4fs_readdir(
 /* Perforce API */
 int p4_init(void);
 void p4_shutdown(void);
-struct string_vector p4_run(char const *cmd);
+struct string_vector p4_run(char const *cmd, ...);
+
+/* Debug API */
+void dlog(char const *fmt, ...);
+
+/* Retrieval API */
+struct tree_node *tree_get_depot_root(char const *name);
+struct tree_node *tree_find_child(struct tree_node *node, char const *s, int n);
+
+/* Global data */
+extern struct string_vector g_depots;
 
 NS_END
 

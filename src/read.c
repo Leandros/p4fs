@@ -10,6 +10,7 @@ p4fs_read(
     off_t offset,
     struct fuse_file_info *fi)
 {
+    dlog(" --- READ ---\n");
     return 0;
 }
 
